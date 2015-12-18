@@ -1,0 +1,64 @@
+\documentclass{article}
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+
+<<>>=
+par(mfrow=c(2,1))
+options(scipen=10)
+setwd("/Users/alice/Desktop/projects/pacbio_kinetics")
+
+files <- list.files(pattern=".bax.h5.cmp.h5.csv")
+for (input in files) {
+  
+    ipds = read.table(input, header=T,sep=",")
+    plot(ipds$ipdRatio,ipds$coverage,col=ifelse(ipds$base=="A","red",ifelse(ipds$base=="C","blue",ifelse(ipds$base=="T","green","yellow"))),pch=3, main=gsub("_m141008_201617_42177R_c100717492550000001823136902281512_s1_p0.1.bax.h5.cmp.h5.csv","", input),xlab="IPD ratio",ylab="COVERAGE")
+    
+        legend("topright", 
+      legend = c("A","C","T","G"),
+      col = c("red","blue","green","yellow"),
+      pch = c(3,3,3,3)
+     )
+    
+    plot(ipds$tpl,ipds$score,col=ifelse(ipds$base=="A","red",ifelse(ipds$base=="C","blue",ifelse(ipds$base=="T","green","yellow"))),pch=3, main=gsub("_m141008_201617_42177R_c100717492550000001823136902281512_s1_p0.1.bax.h5.cmp.h5.csv","", input),xlab="POSITION",ylab="SCORE")
+
+    legend("topright", 
+      legend = c("A","C","T","G"),
+      col = c("red","blue","green","yellow"),
+      pch = c(3,3,3,3)
+     )
+}
+
+@
+
+<<modifications>>=
+#only positions where modifications have been detected
+par(mfrow=c(2,2))
+
+files <- list.files(pattern=".bax.h5.cmp.h5.csv")
+for (input in files) {
+  
+  ipds = read.table(input, header=T,sep=",")
+  hist(ipds[ipds$base=="A" & ipds$coverage=="8",]$ipdRatio,xlab="A ipdRatio, coverage 8",main=gsub("_m141008_201617_42177R_c100717492550000001823136902281512_s1_p0.1.bax.h5.cmp.h5","", input),outline=FALSE,breaks=50,col="beige")
+  hist(ipds[ipds$base=="C" & ipds$coverage=="8",]$ipdRatio,xlab="C ipdRatio, coverage 8",main=gsub("_m141008_201617_42177R_c100717492550000001823136902281512_s1_p0.1.bax.h5.cmp.h5","", input),outline=FALSE,breaks=50,col="beige")
+  hist(ipds[ipds$base=="T" & ipds$coverage=="8",]$ipdRatio,xlab="T ipdRatio, coverage 8",main=gsub("_m141008_201617_42177R_c100717492550000001823136902281512_s1_p0.1.bax.h5.cmp.h5","", input),outline=FALSE,breaks=50,col="beige")
+  hist(ipds[ipds$base=="G" & ipds$coverage=="8",]$ipdRatio,xlab="G ipdRatio, coverage 8",main=gsub("_m141008_201617_42177R_c100717492550000001823136902281512_s1_p0.1.bax.h5.cmp.h5","", input),outline=FALSE,breaks=50,col="beige")
+}
+@
+
+<<pickles>>=
+#all positions with the coverage>=3
+files <- list.files(pattern=".bax.h5.cmp.h5.pickle")
+for (input in files) {
+  
+  ipds = read.table(input, header=T,sep=",")
+  hist(ipds[ipds$base=="A",]$ipdRatio,xlab="A ipdRatio",main=gsub("_m141008_201617_42177R_c100717492550000001823136902281512_s1_p0.1.bax.h5.cmp.h5","", input),outline=FALSE,breaks=20)
+  hist(ipds[ipds$base=="C",]$ipdRatio,xlab="C ipdRatio",main=gsub("_m141008_201617_42177R_c100717492550000001823136902281512_s1_p0.1.bax.h5.cmp.h5","", input),outline=FALSE,breaks=20)
+  hist(ipds[ipds$base=="T",]$ipdRatio,xlab="T ipdRatio",main=gsub("_m141008_201617_42177R_c100717492550000001823136902281512_s1_p0.1.bax.h5.cmp.h5","", input),outline=FALSE,breaks=20)
+  hist(ipds[ipds$base=="G",]$ipdRatio,xlab="G ipdRatio",main=gsub("_m141008_201617_42177R_c100717492550000001823136902281512_s1_p0.1.bax.h5.cmp.h5","", input),outline=FALSE,breaks=20)
+}
+@
+
+
+
+\end{document}
